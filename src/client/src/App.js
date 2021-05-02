@@ -14,7 +14,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import _ from 'lodash';
 
 import { io } from "socket.io-client";
-const SERVER = "http://localhost:8080";
+const SERVER = "";
 
 const styles = theme => ({
   root: {
