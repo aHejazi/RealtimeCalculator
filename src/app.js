@@ -11,19 +11,6 @@ const _ = require('lodash');
 
 var last10 = []
 
-app.get('/calculate', (req, res) => {
-    res.send('New Calculation');
-    const connTS = new Date();
-
-    last10.push(connTS.toLocaleString());
-    last10 = _.drop(last10, [n=last10.length-10]);
-
-    io.broadcast.emit('history_update', {
-        history: last10,
-        new: connTS.toLocaleString()
-    });
-})
-
 io.on('connection', (socket) => {
     console.log('a user connected');
 
@@ -51,6 +38,15 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 })
+
+// if (process.env.NODE_ENV === 'production') {
+    // Serve any static files
+    app.use(express.static(path.join(__dirname, 'client/build')));
+    // Handle React routing, return all requests to React app
+    app.get('*', function(req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+// }
 
 server.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
