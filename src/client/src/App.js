@@ -40,7 +40,29 @@ const styles = theme => ({
     textAlign: "center",
     textAlignLast: "center",
     backgroundColor: "gainsboro",
-    padding: 2
+    padding: 2,
+  },
+  displayContainer: {
+    maxWidth: (66 * 4),
+    minWidth: (66 * 4),
+  },
+  historyTextArea: {
+    minHeight: 200,
+    minWidth: "96%",
+  },
+  historyContainer: {
+    // minWidth: (66 * 4),
+    maxWidth: "40%",
+    alignContent: "center",
+    marginInline: "auto",
+    marginTop: 25,
+  },
+  historyCardContent: {
+    display: "grid",
+  },
+  historyGrid: {
+    maxWidth: (66 * 4),
+    minWidth: (66 * 4),
   }
 });
 
@@ -216,7 +238,7 @@ class App extends React.Component {
     return (
       <div className={classes.root}>
         <Grid className={classes.calculatorKeys} container spacing={1}>
-          <Grid container item xs={12} spacing={1}>
+          <Grid className={classes.displayContainer} container item xs={12} spacing={1}>
             <React.Fragment>
                 <Typography className={classes.display}>
                   {this.state.display || 0}
@@ -256,12 +278,12 @@ class App extends React.Component {
             </React.Fragment>
           </Grid>
         </Grid>
-        <Grid container item xs={12} spacing={1}>
+        <Grid className={classes.historyContainer} container item xs={12} spacing={1}>
             <React.Fragment>
-              <Grid item xs={12}>
+              <Grid className={classes.historyGrid} item xs={12}>
               <Card>
                 <CardActionArea>
-                  <CardContent>
+                  <CardContent className={classes.historyCardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
                       History
                     </Typography>
@@ -273,6 +295,12 @@ class App extends React.Component {
                       aria-label="maximum height"
                       placeholder="History"
                       value={this.state.history.join('\r\n')}
+                      className={classes.historyTextArea}
+
+                      disabled
+                      id="history-textarea"
+                      label="History"
+                      variant="outlined"
                     />
                   </CardContent>
                 </CardActionArea>
