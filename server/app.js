@@ -7,14 +7,44 @@ const server = http.createServer(app);
 const path = require('path');
 const io = require('socket.io')(server);
 
-app.get('/calculate', (req, res) => {
+const _ = require('lodash');
 
-    res.send('New Calculation')
+var last10 = []
+
+app.get('/calculate', (req, res) => {
+    res.send('New Calculation');
+    const connTS = new Date();
+
+    last10.push(connTS.toLocaleString());
+    last10 = _.drop(last10, [n=last10.length-10]);
+
+    io.broadcast.emit('history_update', {
+        history: last10,
+        new: connTS.toLocaleString()
+    });
 })
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    socket.emit('connection', "new conn");
+
+    socket.on('new_operation', (newOp) => {
+        console.log('new_operation', newOp);
+
+        newOp_str = `${newOp.x} ${newOp.op} ${newOp.y} = ${newOp.result}`;
+
+        last10.push(newOp_str);
+        last10 = _.drop(last10, [n=last10.length-10]);
+
+        io.emit('history_update', {
+            history: last10,
+            new: newOp_str,
+            result: newOp.result
+        });
+    });
+
+    socket.emit('history_update', {
+        history: last10
+    });
 });
 
 app.use((req, res, next) => {
