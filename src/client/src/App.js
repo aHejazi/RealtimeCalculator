@@ -10,6 +10,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import _ from 'lodash';
 
@@ -76,7 +77,8 @@ class App extends React.Component {
       x: "",
       y: "",
       display: "",
-      history: []
+      history: [],
+      connected: false,
     };
 
     this.socket = io(SERVER, {
@@ -93,6 +95,8 @@ class App extends React.Component {
   componentDidMount() {
     this.socket.on("history_update", (newHistory) => {
       // console.log("New History: ", newHistory);
+      
+      this.setState(prevState => ({ connected: true }));
 
       if(_.isArray(newHistory.history)) {
         this.setState(
@@ -105,6 +109,16 @@ class App extends React.Component {
 
     this.socket.on("connection", (data) => {
       console.log(data);
+
+      this.setState(prevState => ({ connected: true }));
+    });
+
+    this.socket.on("connect_error", () => {
+      this.setState(prevState => ({ connected: false }));
+    });
+    
+    this.socket.on("disconnect", (reason) => {
+      this.setState(prevState => ({ connected: false }));
     });
   }
 
@@ -282,6 +296,13 @@ class App extends React.Component {
             <React.Fragment>
               <Grid className={classes.historyGrid} item xs={12}>
               <Card>
+                <div style={{ display: this.state.connected ? "none" : "block" }}>
+                  {this.state.connected ? (
+                    <div/>
+                  ) : (
+                    <MuiAlert display={this.state.connected ? "none" : "flex"} severity="error" elevation={6} variant="filled"> Disconnected </MuiAlert>
+                  )}
+                </div>
                 <CardActionArea>
                   <CardContent className={classes.historyCardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
