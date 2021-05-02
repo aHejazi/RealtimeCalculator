@@ -14,7 +14,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import _ from 'lodash';
 
 import { io } from "socket.io-client";
-const SERVER = "http://127.0.0.1:3030";
+const SERVER = "http://localhost:8080";
 
 const styles = theme => ({
   root: {
@@ -70,7 +70,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.socket.on("history_update", (newHistory) => {
-      console.log("New History: ", newHistory);
+      // console.log("New History: ", newHistory);
 
       if(_.isArray(newHistory.history)) {
         this.setState(
@@ -87,7 +87,7 @@ class App extends React.Component {
   }
 
   handleNumber(value) {
-    console.log(`${value}`);
+    // console.log(`${value}`);
 
     if(!this.state.operation) {
       this.setState(
@@ -96,7 +96,7 @@ class App extends React.Component {
           display: `${prevState.x}${value}`
         })
       );
-      console.log('Adding to X');
+      // console.log('Adding to X');
     } else if(this.state.calcResult) {
       this.setState(prevState => ({
           x: `${value}`,
@@ -106,19 +106,19 @@ class App extends React.Component {
           calcResult: "",
         })
       );
-      console.log('Adding to Y');
+      // console.log('Adding to Y');
     } else {
       this.setState(prevState => ({
           y: `${prevState.y}${value}`,
           display: `${prevState.x} ${prevState.operation} ${prevState.y}${value}`
         })
       );
-      console.log('Adding to Y');
+      // console.log('Adding to Y');
     }
   }
 
   handleOp(value) {
-    console.log(`${value}`);
+    // console.log(`${value}`);
     
     if(!this.state.operation) {
       this.setState(prevState => ({
@@ -149,7 +149,7 @@ class App extends React.Component {
         display: "0"
       })
     );
-    console.log("Clearing all");
+    // console.log("Clearing all");
   }
 
   validate_equation() {

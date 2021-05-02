@@ -12,10 +12,10 @@ const _ = require('lodash');
 var last10 = []
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    // console.log('a user connected');
 
     socket.on('new_operation', (newOp) => {
-        console.log('new_operation', newOp);
+        // console.log('new_operation', newOp);
 
         newOp_str = `${newOp.x} ${newOp.op} ${newOp.y} = ${newOp.result}`;
 
@@ -49,5 +49,5 @@ app.use((req, res, next) => {
 // }
 
 server.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`app listening at http://localhost:${port}`)
 })
